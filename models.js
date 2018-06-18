@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-const db = new Sequelize('postgres://localhost:5432/plantr');
+const db = new Sequelize('postgres://localhost:5432/plantr', {logging: false});
 
 module.exports = db;
 
@@ -41,6 +41,8 @@ const Vegetable = db.define('vegetable', {
   }
 })
 
+
+
 Plot.belongsTo(Gardener, {as: 'gardener'})
 
 Plot.belongsToMany(Vegetable, {through: 'vegetable_plot'})
@@ -48,4 +50,10 @@ Vegetable.belongsToMany(Plot, {through: 'vegetable_plot'})
 
 Gardener.belongsTo(Vegetable, {as: 'favorite_vegetable'})
 
-
+Vegetable.create({
+name: 'tomato',
+color: 'red',
+planted_on: Date.now()
+})
+  .then(veggie => console.log(veggie.name))
+  .catch(error => console.log(error))
